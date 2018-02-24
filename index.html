@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<!--Project for CS322: 25/01/2015
+
+4th BSc CSSE
+
+Ambient Noise Generation: This application takes in 6 precomposed sound files (Fire, Wind, Rain, Stream, Spring, Thunder) and 3 dynamically generated sound waves (White Noise, Pink Noise, Brown Noise)
+and lets the user play/mix them together. Currently a Safari-based application.
+-->
+<head>
+  <meta charset="UTF-8">
+  <!--Script for sharing application via social media-->
+  <script type="text/javascript" src="js/sharebuttons.js"></script>
+  <script type="text/javascript">stLight.options({publisher: "358e2418-4980-48c0-89d8-06caa26ffcbd", doNotHash: false, doNotCopy: false,  hashAddressBar: true});</script>
+  <!--Script for general functions used by the application-->
+  <script type="text/javascript" src="js/func.js"></script>
+  <!--Script for generating white, pink and brown noise-->
+  <script type="text/javascript" src="js/wpb_noise.js"></script>
+  <!--Script for AngularJS-->
+  <script type="text/javascript" src="js/angular.js"></script>
+  <!--Script for BootStrap JS-->
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+  <!--Script for calling jQuery functions-->
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <!--Call to include BootStrap stylesheet-->
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <!--Call to include our stylesheet-->
+  <link rel="stylesheet" href="css/loopy_styles.css" />
+  <title>Ambient Sound Generator</title>
+</head>
+
+
+<body>
+<div class="background">
+  <div class="app-container" class="col-md-12">
+    <div id="intro-text">
+    <!--This code give us our social media sharing buttons, usign sharethis.com's JS to allow sharing-->
+      <div id="share-buttons" class="pull-right">
+        <span class='st_facebook_large' displayText='Facebook'></span>
+        <span class='st_twitter_large' displayText='Tweet'></span>
+        <span class='st_linkedin_large' displayText='LinkedIn'></span>
+      </div>
+      <!---->
+      <h1 id="site-title">Ambient Sound Generator</h1>
+      <p>Mix ambient sounds together to block out distractions and help you focus or relax</p>
+      <p>Click the buttons below to begin</p>
+    </div>
+    <!--This container holds all of our sound icons-->
+    <div class="col-md-9 col-sm-8 col-xs-6 pull-left">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+    <!--Button for Sound 1: Fire-->
+      <div id="btn1" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/fire-pause.png" name="Fire" id="playBtn1_play" onclick="play_sound(1);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/fire-play.png" name="Fire" id="playBtn1_stop" onclick="stop_sound(1);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0" max="1" value="0.7" step="0.1" id="playBtn1_vol" onchange="changeVolume(1,gain1);" style="display:none">
+      </div>
+    <!--Button for Sound 2: Wind-->
+      <div id="btn2" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/wind-pause.png" name="Wind" id="playBtn2_play" onclick="play_sound(2);"  />
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/wind-play.png" name="Wind" id="playBtn2_stop" onclick="stop_sound(2);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0" max="1" value="0.7" step="0.1" id="playBtn2_vol" onchange="changeVolume(2,gain2);"style="display:none">
+      </div>
+      <!--Button for Sound 3: Rain-->
+      <div id="btn3" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/rain-pause.png" name="Rain" id="playBtn3_play" onclick="play_sound(3);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/rain-play.png" name="Rain" id="playBtn3_stop" onclick="stop_sound(3);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0" max="1" value="0.7" step="0.1" id="playBtn3_vol" onchange="changeVolume(3,gain3);"style="display:none">
+      </div>
+      </br>
+      <!--Button for Sound 4: Stream-->
+      <div id="btn4" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/stream-pause.png" name="Stream" id="playBtn4_play" onclick="play_sound(4);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/stream-play.png" name="Stream" id="playBtn4_stop" onclick="stop_sound(4);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0" max="1" value="0.7" step="0.1"id="playBtn4_vol" onchange="changeVolume(4,gain4);"style="display:none">
+      </div>
+      <!--Button for Sound 6: Thunger-->
+      <div id="btn6" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/thunder-pause.png" name="Thunder" id="playBtn6_play" onclick="play_sound(6);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/thunder-play.png" name="Thunder" id="playBtn6_stop" onclick="stop_sound(6);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0" max="1" value="0.7" step="0.1" id="playBtn6_vol" onchange="changeVolume(6,gain6);"style="display:none">
+      </div>
+      <!--Button for Sound 5: Spring-->
+      <div id="btn5" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/forest-pause.png" name="Spring" id="playBtn5_play" onclick="play_sound(5);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/forest-play.png" name="Spring" id="playBtn5_stop" onclick="stop_sound(5);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0" max="1.5" value="1.05" step="0.15" id="playBtn5_vol" onchange="changeVolume(5,gain5);"style="display:none">
+      </div>
+      </br>
+      <!--Button for Sound 7: White Noise-->
+      <div id="btn7" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/whitenoise-pause.png" name="White" id="playBtn7_play" onclick="play_sound(7);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/whitenoise-play.png" name="White" id="playBtn7_stop" onclick="stop_sound(7);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0"max="0.8" value="0.56" step="0.08"id="playBtn7_vol" onchange="changeVolume(7,gain7);"style="display:none">
+      </div>
+      <!--Button for Sound 8: Pink Noise-->
+      <div id="btn8" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/pinknoise-pause.png" name="Pink" id="playBtn8_play" onclick="play_sound(8);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/pinknoise-play.png" name="Pink" id="playBtn8_stop" onclick="stop_sound(8);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0"max="0.8" value="0.56" step="0.08"id="playBtn8_vol" onchange="changeVolume(8,gain8);"style="display:none">
+      </div>
+      <!--Button for Sound 9: Brown Noise-->
+      <div id="btn9" class="col-md-4 col-sm-3 col-xs-2">
+        <!--Paused state, visible when sound not playing. Onclick function calls play_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/brownnoise-pause.png" name="Brown" id="playBtn9_play" onclick="play_sound(9);"/>
+        <!--Playing state, visible when sound playing. Onclick function calls stop_sound function with param of sound no.-->
+        <input type="image" class="pp_img" src="img/brownnoise-play.png" name="Brown" id="playBtn9_stop" onclick="stop_sound(9);" style="display:none"/>
+        <!--Volume Slider, visible when sound is playing, Onchange function calls changeVolume with param of sound no. and gain no.-->
+        <input type="range" min="0" max="0.8" value="0.56" step="0.08"id="playBtn9_vol" onchange="changeVolume(9,gain9);"style="display:none">
+      </div>
+    </div>
+    </div>
+    <!--This div contains our control panel including filter, volume, frequency and quality controls-->
+    <div class="col-md-3 col-sm-4 col-xs-6 pull-right" id="filter-container" >
+      <!--This check-box lets us turn on/off the lowpass filter-->
+      <p id="filter-switches"><b>Filter</b></p>
+      </br>
+      <p id="filter-switches">None
+        <input type="radio" style="vertical-align: middle; margin: 0px;"name="filter" id="filter_check_none" onchange="toggle_filter(lowpass);">
+      </p>
+      </br>
+      <p id="filter-switches">Lowpass Filter
+        <input type="radio" style="vertical-align: middle; margin: 0px;"name="filter" id="filter_check" onchange="toggle_filter(lowpass);">
+      </p>
+      </br>
+
+      <!--This slider controls the main volume of the application-->
+      <p id="filter-switches"><b>Volume</b>
+        <input type="range" min="0" max="1" value="0.7" step="0.1" id="master_vol" onchange="change_master_volume();">
+      </p>
+      </br>
+      <!--This slider controls the frequency of playback-->
+      <p id="filter-switches"><b>Frequency</b>
+        <input type="range" min="40" max="22000" step="10" value="6000" id="freq" onchange="change_frequency(lowpass);"></p>
+      </br>
+      <!--This slider controls the quality of playback-->
+      <p id="filter-switches"><b>Quality</b>
+        <input type="range" min="0" max="1" step="0.01" value="0.6" id="qual" onchange="change_quality(lowpass);"></p>
+        </br>
+        </br>
+        </br>
+    </div>
+  </div>
+  </div>
+</body>
+<!--This function was initially designed to dynamically update the background colour, but has since stopped working.-->
+<script>
+function updateColor(){
+    x = 1;  // x = seconds
+  var d = new Date()
+  var h = d.getHours();
+  var m = d.getMinutes();
+  var s = d.getSeconds();
+
+  if (h<=9) {h = '0'+h};
+  if (m<=9) {m = '0'+m};
+  if (s<=9) {s = '0'+s};
+
+  var color = '#'+h+m+s;
+
+    $("div.app-container").css("background-color", color );
+    $("div.background").css("background-color", color );
+    $("p.filter-switches").css("color", color );
+
+    setTimeout(updateColor, x*1000);
+}
+
+updateColor(); // execute function
+</script>
+<html>
