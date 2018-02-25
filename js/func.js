@@ -18,6 +18,7 @@ window.onload = function(){
   //Sets up the AudioContext depending on if browser is webkit or not.
   context = new (window.AudioContext || window.webkitAudioContext)();
   mySampleRate = context.sampleRate;
+  
   //Sets up the master volume, with value equal to the value on the slider.
   masterVolume = context.createGain();
   masterVolume.gain.value=parseFloat(document.getElementById('master_vol').value);
