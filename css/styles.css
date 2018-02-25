@@ -29,7 +29,7 @@ ol, ul {
 	list-style: none;
 }
 blockquote, q {
-	uotes: none;
+	quotes: none;
 }
 blockquote:before, blockquote:after,
 q:before, q:after {
